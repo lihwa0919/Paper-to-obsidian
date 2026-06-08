@@ -1,38 +1,39 @@
 ---
 name: paper-to-obsidian
-description: Reads an academic paper PDF and saves a structured Korean summary note to the user's Obsidian vault. Trigger when the user says things like "이 논문 요약해서 옵시디언에 저장해줘", "논문 요약 노트 만들어줘", "이 PDF 옵시디언에 정리해줘", "논문 읽고 요약해줘", "이 논문 정리해줘". The user provides a PDF file path; Claude reads it, summarizes in Korean with 3 structured sections, and writes a markdown note to the Obsidian vault.
+description: Reads an academic paper PDF and saves a structured Korean summary note to the user's Obsidian vault. Trigger when the user says things like "이 논문 요약해서 옵시디언에 저장해줘", "논문 요약 노트 만들어줘", "이 PDF 옵시디언에 정리해줘", "논문 읽고 요약해줘", "이 논문 정리해줘".
 ---
 
 # Paper to Obsidian
 
 Reads a research paper PDF and saves a structured Korean summary note to Obsidian.
 
-## Vault Location
+## Step 1 — Confirm vault path and PDF
 
-Default: `C:\Users\lihwa\Documents\Obsidian Vault\`
+**Before doing anything else**, check if the user already provided:
+- ✅ **PDF path** — use it directly
+- ✅ **Obsidian vault path** — use it directly
 
-If the user specifies a subfolder (e.g., `VR_reference/Introduction`), save there instead.
+If either is missing, ask in a **single message**:
 
-## Workflow
+> "두 가지만 알려주세요:
+> 1. 논문 PDF 경로 (예: `C:\Users\이름\논문.pdf`)
+> 2. Obsidian 볼트 경로 (예: `C:\Users\이름\Documents\Obsidian Vault`)"
 
-### Step 1 — Get the PDF
+Do not ask for them separately. Do not proceed until both are confirmed.
 
-The user provides a PDF file path directly. Ask for it if not given.
+If the user specifies a **subfolder** within the vault (e.g., `VR_reference/Introduction`), save there instead of the vault root.
 
-For papers in the local Zotero storage, the path typically looks like:
-`C:\Users\lihwa\Zotero\storage\[8-char-key]\[filename].pdf`
+## Step 2 — Read the paper
 
-### Step 2 — Read the paper
-
-Use the `Read` tool on the PDF file path. For papers longer than 20 pages, read in this order of priority:
-- Abstract + Introduction (first 4 pages)
+Use the `Read` tool on the PDF path. For papers longer than 20 pages, read in this priority order:
+- Abstract + Introduction (first ~4 pages)
 - Methodology section
 - Results / Experiments section
 - Conclusion
 
-### Step 3 — Summarize in Korean (3 sections)
+## Step 3 — Summarize in Korean (3 sections)
 
-Write summaries using the **exact Korean headers** below. Be specific and detailed.
+Write the summary using the **exact Korean headers** below. Be specific and detailed.
 
 | Section | What to include |
 |---|---|
@@ -40,9 +41,9 @@ Write summaries using the **exact Korean headers** below. Be specific and detail
 | **방법론** | Specific tool names, model architectures, algorithms, datasets (keep in English); description in Korean. Include key performance numbers |
 | **인용 문장** | A single citation-ready sentence in Korean, third-person academic style, with `[ ]` citation placeholders |
 
-See [note-template.md](references/note-template.md) for exact format and examples.
+See [note-template.md](references/note-template.md) for the exact format and real examples.
 
-### Step 4 — Determine the filename
+## Step 4 — Determine the filename
 
 Format: `[Full Paper Title](Year).md`
 
@@ -52,11 +53,11 @@ Examples:
 - `Geometry- and Appearance-Based Reasoning of Construction Progress Monitoring(ASCE2018).md`
 - `Automated Construction Progress Monitoring Using Image Segmentation(2024).md`
 
-### Step 5 — Write the note
+## Step 5 — Write the note
 
-Write the file to `C:\Users\lihwa\Documents\Obsidian Vault\[filename]` using the Write tool.
+Write the file to `[vault path]\[filename]` using the Write tool.
 
-## Language Rules
+## Language rules
 
 - All summary content in **Korean**
 - Model names, algorithm names, tool names, acronyms: **keep in English**
